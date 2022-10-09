@@ -1,0 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAL.Services
+{
+    public class ProjectService : IProjectService
+    {
+        private readonly AppDbContext _appDbContext;
+
+        public ProjectService(AppDbContext appDbContext) => _appDbContext = appDbContext;
+
+        public async Task<IList<Project>> GetAll() => await _appDbContext.Projects.AsNoTracking().ToListAsync();
+
+        public async Task<Project> GetLegacyProject()
+        {
+            return await _appDbContext.Projects.Include(i => i.ProjectFiles).FirstOrDefaultAsync(c => c.DirectoryPath == "legacy");
+
+        }
+
+        public async Task AddProjectFile(ProjectFile file, Project project)
+        {
+            if (!_appDbContext.ProjectFiles.Any(c => c.PdfFileUrl == file.PdfFileUrl))
+            {
+                project.ProjectFiles.Add(file);
+                await _appDbContext.SaveChangesAsync();
+               
+            }
+        }
+
+        public async Task<IList<Project>> GetAllWithoutLgacy()
+        {
+            return await _appDbContext.Projects.Include(i => i.ProjectFiles).Where(c => c.DirectoryPath!="legacy").ToListAsync();
+        }
+
+        public async Task<int> ProjectFilesCount(int projectId)
+        {
+           return await _appDbContext.ProjectFiles.CountAsync(c=>c.ProjectId==projectId);
+        }
+    }
+}
