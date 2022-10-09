@@ -13,7 +13,7 @@ public class DoFileOCR : IJob
     public async Task Execute(IJobExecutionContext context)
     {
         _logger.LogInformation("Starting ReadProjectExcleFile ");
-          
+        var filesToOCR=await _projectService.Get5FilesToOCR();  
     }
 }
 
