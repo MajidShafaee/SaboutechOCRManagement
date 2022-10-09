@@ -13,10 +13,7 @@ public class DoFileOCR : IJob
     public async Task Execute(IJobExecutionContext context)
     {
         _logger.LogInformation("Starting ReadProjectExcleFile ");
-        //get 4 files to OCR
-        //add file object to thread
-        //set callback
-        //update file status    
+          
     }
 }
 

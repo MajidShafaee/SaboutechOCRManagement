@@ -13,5 +13,7 @@ namespace DAL.Services
         public Task<Project> GetLegacyProject();
         public Task AddProjectFile(ProjectFile file, Project project);
         public Task<int> ProjectFilesCount(int projectId);
+        public Task<bool> FileExist(string fileName);
+        public Task<IList<ProjectFile>> Get5FilesToOCR();
     }
 }

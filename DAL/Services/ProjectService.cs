@@ -22,7 +22,7 @@ namespace DAL.Services
 
         public async Task AddProjectFile(ProjectFile file, Project project)
         {
-            if (!_appDbContext.ProjectFiles.Any(c => c.PdfFileUrl == file.PdfFileUrl))
+            if (!await _appDbContext.ProjectFiles.AnyAsync(c => c.PdfFileUrl == file.PdfFileUrl))
             {
                 project.ProjectFiles.Add(file);
                 await _appDbContext.SaveChangesAsync();
@@ -38,6 +38,16 @@ namespace DAL.Services
         public async Task<int> ProjectFilesCount(int projectId)
         {
            return await _appDbContext.ProjectFiles.CountAsync(c=>c.ProjectId==projectId);
+        }
+
+        public async Task<bool> FileExist(string  fileName)
+        {
+            return await _appDbContext.ProjectFiles.AnyAsync(c=>c.PdfFileUrl==fileName);
+        }
+
+        public async Task<IList<ProjectFile>> Get5FilesToOCR()
+        {
+           return await _appDbContext.ProjectFiles.Include(c => c.FileOCR).Where(c => c.FileOCR == null).Take(5).ToListAsync();
         }
     }
 }
