@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj" />
+    <ProjectReference Include="..\OCR\OCR.csproj" />
   </ItemGroup>
 
 </Project>
