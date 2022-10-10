@@ -24,9 +24,9 @@ public class ReadProjectFile : IJob
                 if (dsexcelRecords != null && dsexcelRecords.Tables.Count > 0)
                 {
                     DataTable dtStudentRecords = dsexcelRecords.Tables[0];
-                    for (int i = 0; i < dtStudentRecords.Rows.Count; i++)
+                    for (int i = 1; i < dtStudentRecords.Rows.Count; i++)
                     {
-                        var lng = dtStudentRecords.Rows[i][10].ToString();
+                        var lng = dtStudentRecords.Rows[i][10].ToString();                        
                         if (lng == "fa")
                         {
                             var projectFile = new ProjectFile

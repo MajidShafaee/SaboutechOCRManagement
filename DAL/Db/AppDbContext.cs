@@ -16,7 +16,9 @@ namespace DAL
         public DbSet<ExportProject> ExportProjects { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("server=DESKTOP-SABOU\\SQLEXPRESS2014;Database=ocr_management;User Id=ocrmng;Password=ocrmng");
+            //server=DESKTOP-QF0K74V\\MSSQLSERVER17;Database=SaboutechOcrManagement;User Id=ocrmng;Password=ocrmng
+            //server=DESKTOP-SABOU\\SQLEXPRESS2014;Database=ocr_management;User Id=ocrmng;Password=ocrmng
+            optionsBuilder.UseSqlServer("server=DESKTOP-QF0K74V\\MSSQLSERVER17;Database=SaboutechOcrManagement;User Id=ocrmng;Password=ocrmng");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
