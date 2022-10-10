@@ -30,17 +30,28 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(t => t.ForJob(jobKey)
     .WithIdentity(jobKey + " trigger")
     .StartAt(DateTimeOffset.Now.AddMinutes(30)));
+
+    var jobKeyReadFiles = new JobKey("ReadProjectFileJob");
+    q.AddJob<ReadProjectFile>(opts =>
+    opts.WithIdentity(jobKeyReadFiles));
+
+    q.AddTrigger(t => t.ForJob(jobKeyReadFiles)
+    .WithIdentity(jobKeyReadFiles + " trigger")
+    .StartAt(DateTimeOffset.Now.AddMinutes(10)));
 });
 
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 #endregion
+
 var app = builder.Build();
+
 using (var db = new AppDbContext())
 {
     if (db.Database.GetPendingMigrations().Count() > 0)
         db.Database.Migrate();
 }
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -58,6 +69,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
 using (var db = new AppDbContext())
 {
     if (db.Database.GetPendingMigrations().Count() > 0)
