@@ -20,23 +20,38 @@ public class ReadProjectFile : IJob
             var projectFilesCount = await _projectService.ProjectFilesCount(project.Id);
             if (files.Length != projectFilesCount)
             {
-                foreach (var file in files)
+                var dsexcelRecords = ExcleHelper.ReadExcleFile(project.ExclePath);
+                if (dsexcelRecords != null && dsexcelRecords.Tables.Count > 0)
                 {
-                    if (!await _projectService.FileExist(file))
+                    DataTable dtStudentRecords = dsexcelRecords.Tables[0];
+                    for (int i = 0; i < dtStudentRecords.Rows.Count; i++)
                     {
-                        await _projectService.AddProjectFile(new ProjectFile
+                        var lng = dtStudentRecords.Rows[i][10].ToString();
+                        if (lng == "fa")
                         {
-                            CreatedAt = DateTime.Now,
-                            Exported = false,
-                            PdfFileUrl ="",
-                            ProjectId = project.Id,                            
-                        }, project);
+                            var projectFile = new ProjectFile
+                            {
+                                PdfFileUrl = dtStudentRecords.Rows[i][0].ToString(),
+                                PdfFilePath = dtStudentRecords.Rows[i][1].ToString(),
+                                JournalName = dtStudentRecords.Rows[i][2].ToString(),
+                                Volume = dtStudentRecords.Rows[i][3].ToString(),
+                                Issue = dtStudentRecords.Rows[i][4].ToString(),
+                                Year = dtStudentRecords.Rows[i][5].ToString(),
+                                TitleFa = dtStudentRecords.Rows[i][6].ToString(),
+                                TitleEn = dtStudentRecords.Rows[i][7].ToString(),
+                                ISSN = dtStudentRecords.Rows[i][11].ToString(),
+                                AuthorsFa = dtStudentRecords.Rows[i][12].ToString(),
+                                AuthorsEn = dtStudentRecords.Rows[i][13].ToString(),
+                                CreatedAt = DateTime.Now,
+                                Exported = false,
+                                ProjectId = project.Id,
+                            };
+                            await _projectService.AddProjectFile(projectFile, project);
+                        }                        
                     }
                 }
             }
         }
-
-
     }
 }
 

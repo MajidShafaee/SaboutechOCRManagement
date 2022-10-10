@@ -19,5 +19,16 @@ namespace DAL
         [DefaultValue(false)]
         public bool Exported { get; set; }=false;
         public string PdfFileUrl { get; set; }
+        public string PdfFilePath { get; set; }
+        public string JournalName { get; set; }
+        public string Year { get; set; }
+        public string TitleFa { get; set; }
+        public string TitleEn { get; set; }
+        public string ISSN { get; set; }
+        public string AuthorsFa { get; set; }
+        public string AuthorsEn { get; set; }
+        public string Volume { get; set; }
+        public string Issue { get; set; }
+
     }
 }
