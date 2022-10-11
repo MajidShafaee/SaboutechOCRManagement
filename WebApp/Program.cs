@@ -37,7 +37,7 @@ builder.Services.AddQuartz(q =>
 
     q.AddTrigger(t => t.ForJob(jobKeyReadFiles)
     .WithIdentity(jobKeyReadFiles + " trigger")
-    .StartAt(DateTimeOffset.Now));
+    .StartAt(DateTimeOffset.Now.AddMinutes(10)));
 });
 
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
