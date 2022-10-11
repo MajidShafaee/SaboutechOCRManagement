@@ -13,6 +13,7 @@ public class ReadProjectFile : IJob
     public async Task Execute(IJobExecutionContext context)
     {
         _logger.LogInformation("Starting ReadProjectFile ");
+        Console.WriteLine("Starting ReadProjectFile");
         var projects = await _projectService.GetAllWithoutLgacy();
         foreach (var project in projects)
         {
@@ -57,6 +58,7 @@ public class ReadProjectFile : IJob
                 }
             }
         }
+        await _projectService.SaveASync();
     }
 }
 

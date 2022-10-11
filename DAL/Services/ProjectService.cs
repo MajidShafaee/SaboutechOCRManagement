@@ -22,8 +22,7 @@ namespace DAL.Services
 
         public async Task AddProjectFile(ProjectFile file, Project project)
         {            
-                project.ProjectFiles.Add(file);
-                await _appDbContext.SaveChangesAsync();
+                project.ProjectFiles.Add(file);               
         }
 
         public async Task<IList<Project>> GetAllWithoutLgacy()
@@ -44,6 +43,11 @@ namespace DAL.Services
         public async Task<IList<ProjectFile>> Get5FilesToOCR()
         {
            return await _appDbContext.ProjectFiles.Include(c => c.FileOCR).Where(c => c.FileOCR == null).Take(5).ToListAsync();
+        }
+
+        public async Task SaveASync()
+        {
+            await _appDbContext.SaveChangesAsync();
         }
     }
 }
