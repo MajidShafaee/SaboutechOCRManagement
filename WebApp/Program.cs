@@ -23,13 +23,13 @@ builder.Services.AddQuartz(q =>
 {
     q.UseMicrosoftDependencyInjectionJobFactory();
 
-    var jobKey = new JobKey("Add Legacy Data Job");
-    q.AddJob<AddLegacyDataJob>(opts =>
-    opts.WithIdentity(jobKey));
+    //var jobKey = new JobKey("Add Legacy Data Job");
+    //q.AddJob<AddLegacyDataJob>(opts =>
+    //opts.WithIdentity(jobKey));
 
-    q.AddTrigger(t => t.ForJob(jobKey)
-    .WithIdentity(jobKey + " trigger")
-    .StartAt(DateTimeOffset.Now.AddMinutes(30)));
+    //q.AddTrigger(t => t.ForJob(jobKey)
+    //.WithIdentity(jobKey + " trigger")
+    //.StartAt(DateTimeOffset.Now.AddMinutes(30)));
 
     var jobKeyReadFiles = new JobKey("ReadProjectFileJob");
     q.AddJob<ReadProjectFile>(opts =>
@@ -37,7 +37,7 @@ builder.Services.AddQuartz(q =>
 
     q.AddTrigger(t => t.ForJob(jobKeyReadFiles)
     .WithIdentity(jobKeyReadFiles + " trigger")
-    .StartAt(DateTimeOffset.Now.AddMinutes(10)));
+    .StartAt(DateTimeOffset.Now));
 });
 
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);

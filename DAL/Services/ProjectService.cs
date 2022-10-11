@@ -21,13 +21,9 @@ namespace DAL.Services
         }
 
         public async Task AddProjectFile(ProjectFile file, Project project)
-        {
-            if (!await _appDbContext.ProjectFiles.AnyAsync(c => c.PdfFileUrl == file.PdfFileUrl))
-            {
+        {            
                 project.ProjectFiles.Add(file);
                 await _appDbContext.SaveChangesAsync();
-               
-            }
         }
 
         public async Task<IList<Project>> GetAllWithoutLgacy()
@@ -40,9 +36,9 @@ namespace DAL.Services
            return await _appDbContext.ProjectFiles.CountAsync(c=>c.ProjectId==projectId);
         }
 
-        public async Task<bool> FileExist(string  fileName)
+        public async Task<bool> FileExist(string pdfFileUrl)
         {
-            return await _appDbContext.ProjectFiles.AnyAsync(c=>c.PdfFileUrl==fileName);
+            return await _appDbContext.ProjectFiles.AnyAsync(c=>c.PdfFileUrl== pdfFileUrl);
         }
 
         public async Task<IList<ProjectFile>> Get5FilesToOCR()

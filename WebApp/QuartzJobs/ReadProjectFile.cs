@@ -46,7 +46,12 @@ public class ReadProjectFile : IJob
                                 Exported = false,
                                 ProjectId = project.Id,
                             };
-                            await _projectService.AddProjectFile(projectFile, project);
+                            if (!await _projectService.FileExist(projectFile.PdfFileUrl))
+                            {
+                                await _projectService.AddProjectFile(projectFile, project);
+
+                            }
+                            
                         }                        
                     }
                 }
