@@ -12,6 +12,7 @@ namespace DAL
         public string DirectoryPath { get; set; }
         [Required]
         public string ExclePath { get; set; }
+        public bool ReadAllFiles { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public ICollection<ProjectFile> ProjectFiles { get; set; }

@@ -4,7 +4,7 @@ public class ReadProjectFile : IJob
 {
     private readonly IProjectService _projectService;
     private readonly ILogger _logger;
-    public ReadProjectFile(IProjectService projectService, ILogger<AddLegacyDataJob> logger)
+    public ReadProjectFile(IProjectService projectService, ILogger<ReadProjectFile> logger)
     {
         _logger = logger;
         _projectService = projectService;
@@ -55,7 +55,9 @@ public class ReadProjectFile : IJob
                             
                         }                        
                     }
+                    project.ReadAllFiles = true;
                 }
+                
             }
         }
         await _projectService.SaveASync();

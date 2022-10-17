@@ -27,7 +27,7 @@ namespace DAL.Services
 
         public async Task<IList<Project>> GetAllWithoutLgacy()
         {
-            return await _appDbContext.Projects.Include(i => i.ProjectFiles).Where(c => c.DirectoryPath!="legacy").ToListAsync();
+            return await _appDbContext.Projects.Include(i => i.ProjectFiles).Where(c => c.DirectoryPath!="legacy" && c.ReadAllFiles==false).ToListAsync();
         }
 
         public async Task<int> ProjectFilesCount(int projectId)
@@ -42,7 +42,7 @@ namespace DAL.Services
 
         public async Task<IList<ProjectFile>> Get5FilesToOCR()
         {
-           return await _appDbContext.ProjectFiles.AsNoTracking().Include(c=>c.Project).Include(c => c.FileOCR).Where(c =>c.ProjectId!=1 && c.FileOCR == null).Take(5).ToListAsync();
+           return await _appDbContext.ProjectFiles.Include(c=>c.Project).Include(c => c.FileOCR).Where(c =>c.ProjectId!=1 && c.FileOCR == null).Take(5).ToListAsync();
         }
 
         public async Task SaveASync()
@@ -56,6 +56,8 @@ namespace DAL.Services
             try
             {
                 using var appDbCntx = new AppDbContext();
+                var file=_appDbContext.ProjectFiles.Find(fileId);
+                file.Status = 2;
                 appDbCntx.FileOCRs.Add(new FileOCR
                 {
                     CreatedAt = DateTime.Now,

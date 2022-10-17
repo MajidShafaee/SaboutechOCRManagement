@@ -29,6 +29,7 @@ namespace DAL
         public string AuthorsEn { get; set; }
         public string Volume { get; set; }
         public string Issue { get; set; }
+        public int Status { get; set; }//0 new //1 ocr process //2 ocred
 
     }
 }
