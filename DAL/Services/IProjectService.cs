@@ -15,6 +15,9 @@ namespace DAL.Services
         public Task<int> ProjectFilesCount(int projectId);
         public Task<bool> FileExist(string fileName);
         public Task<IList<ProjectFile>> Get5FilesToOCR();
+        
+        public Task AddFileOCR(int fileId, string ocrText);
+
         public Task SaveASync();
     }
 }

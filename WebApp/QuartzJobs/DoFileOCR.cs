@@ -18,7 +18,7 @@ public class DoFileOCR : IJob
         var filesToOCR=await _projectService.Get5FilesToOCR(); 
         foreach(var file in filesToOCR)
         {
-            TesseractPersianOCR ocr = new TesseractPersianOCR(file.PdfFileUrl, new TesseractPersianOCR.LoggerCallback(LoggerCallback), new TesseractPersianOCR.DbCallback(DbCallback));
+            TesseractPersianOCR ocr = new TesseractPersianOCR($"{file.Project.DirectoryPath}\\{file.PdfFilePath}",file.PdfFilePath,file.Id, new TesseractPersianOCR.LoggerCallback(LoggerCallback), new TesseractPersianOCR.DbCallback(DbCallback));
             Thread t1 = new Thread(new ThreadStart(ocr.DoOCR));
             t1.Start();
         }
@@ -29,9 +29,10 @@ public class DoFileOCR : IJob
         _logger.LogError("{@appName}. error in doing OCR.{@errorMessage}", "OCR", log);
     }
 
-    public void DbCallback(string ocrText)
+    public void DbCallback(int fileId, string ocrText)
     {
-         _logger.LogError("{@appName}. error in doing OCR.{@errorMessage}", "OCR", ocrText);
+        _logger.LogError($"DbCallback invoked for fileId;{fileId}");
+        _projectService.AddFileOCR(fileId, ocrText);
     }
 }
 

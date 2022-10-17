@@ -8,38 +8,51 @@ namespace OCR
     {
         public delegate void LoggerCallback(string log);
         private LoggerCallback _loggerCallback;
-        public delegate void DbCallback(string ocredText);
+        public delegate void DbCallback(int fileId,string ocredText);
         private DbCallback _dbCallback;
+        private string _filePath;
+        private string _fileName= string.Empty;
+        private int _fileId = 0;
 
-        private string filePath;
+        //static TesseractPersianOCR()
+        //{
+        //    MagickNET.SetTempDirectory(@"E:\imageMagicTempOCRManagement");
+        //    MagickNET.SetGhostscriptDirectory(@"E:\gs");
+        //    MagickNET.Initialize();
+        //}
 
-        public TesseractPersianOCR(string filePath, LoggerCallback loggerCallback,
-            DbCallback dbCallback)
+        public  TesseractPersianOCR(string filePath, string fileName, int fileId, LoggerCallback loggerCallback, DbCallback dbCallback)
         {
             MagickNET.SetTempDirectory(@"E:\imageMagicTempOCRManagement");
+            MagickNET.SetGhostscriptDirectory(@"E:\gs");
             MagickNET.Initialize();
             _loggerCallback = loggerCallback;
             _dbCallback = dbCallback;
-            this.filePath = filePath;
-        }
+            _filePath = filePath;
+            _fileName = fileName;
+            _fileId = fileId;
+        }        
 
         public void DoOCR()
         {
             try
             {
-                Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}. starting file:{filePath}");
+                Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}. starting fileId:{_fileId}---- Name:{_fileName}");
                 var ocrText = string.Empty;                
-                var path = @$"{filePath}";
-                var imagesCount = ConvertPdfToPng(path);
+                var path = @$"{_filePath}";
+                Console.WriteLine($"Converting PdfToPng pdfPath:{path}");
+                var imagesCount = ConvertPdfToPng(path, _fileName,_fileId);
                 Console.WriteLine($"Image Count:{imagesCount}");
                 for (int i = 1; i <= imagesCount; i++)
                 {
-                    Console.WriteLine($"Starting OCR :{Thread.CurrentThread.ManagedThreadId}fromPdf.Page{i}.png");
-                    var (per, text) = TesseractOCR($"{Thread.CurrentThread.ManagedThreadId}fromPdf.Page{i}.png");
-                    ocrText += text;                    
+                    Console.WriteLine($"Starting OCR :{Thread.CurrentThread.ManagedThreadId}_{_fileId}.Page{i}.png");
+                    var (per, text) = TesseractOCR($"{Thread.CurrentThread.ManagedThreadId}_{_fileId}.Page{i}.png");
+                    ocrText += text;
+                    File.Delete($"{Thread.CurrentThread.ManagedThreadId}_{_fileId}.Page{i}.png");
                 }                
-                Console.WriteLine($"Success ocr. file:{filePath}");
-               _dbCallback(ocrText);
+                Console.WriteLine($"Success ocr. fileId:{_fileId}---- Name:{_fileName}");
+                
+               _dbCallback(_fileId, ocrText);
 
             }
 
@@ -56,16 +69,18 @@ namespace OCR
             }
         }
 
-        private int ConvertPdfToPng(string pdfPath)
+      
+        private int ConvertPdfToPng(string pdfPath, string fileName, int fileId)
         {
 
             try
             {
+               
                 var settings = new MagickReadSettings();
 
                 // Settings the density to 300 dpi will create an image with a better quality
-                settings.Density = new Density(300, 300);
-
+                settings.Density = new Density(300, 300, DensityUnit.PixelsPerInch);
+;
                 using (var images = new MagickImageCollection())
                 {
 
@@ -76,8 +91,9 @@ namespace OCR
 
                     foreach (var image in images)
                     {
+                        if(image.Width>1080)
                         // Write page to file that contains the page number
-                        image.Write(Thread.CurrentThread.ManagedThreadId.ToString() + "fromPdf.Page" + page + ".png");
+                        image.Write(Thread.CurrentThread.ManagedThreadId.ToString() + $"_{fileId}.Page" + page + ".png");
                         // Writing to a specific format works the same as for a single image
                         //image.Format = MagickFormat.Ptif;
                         //image.Write("Snakeware.Page" + page + ".tif");
@@ -88,10 +104,10 @@ namespace OCR
             }
             catch (Exception ex)
             {
-                throw new Exception($"Exception on ConvertPdfToPng.\r\n{pdfPath}.\r\n.{ex.Message}");
+                throw new Exception($"Exception on ConvertPdfToPng.__{fileId}__{ex.Message}");
             }
         }
-
+       
         private (string, string) TesseractOCR(string imagePath)
         {
             try

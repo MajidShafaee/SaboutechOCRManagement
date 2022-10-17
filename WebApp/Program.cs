@@ -31,12 +31,20 @@ builder.Services.AddQuartz(q =>
     //.WithIdentity(jobKey + " trigger")
     //.StartAt(DateTimeOffset.Now.AddMinutes(30)));
 
-    var jobKeyReadFiles = new JobKey("ReadProjectFileJob");
-    q.AddJob<ReadProjectFile>(opts =>
-    opts.WithIdentity(jobKeyReadFiles));
+    //var jobKeyReadFiles = new JobKey("ReadProjectFileJob");
+    //q.AddJob<ReadProjectFile>(opts =>
+    //opts.WithIdentity(jobKeyReadFiles));
 
-    q.AddTrigger(t => t.ForJob(jobKeyReadFiles)
-    .WithIdentity(jobKeyReadFiles + " trigger")
+    //q.AddTrigger(t => t.ForJob(jobKeyReadFiles)
+    //.WithIdentity(jobKeyReadFiles + " trigger")
+    //.StartAt(DateTimeOffset.Now.AddMinutes(1)));
+
+    var jobKeyDoFileOCR = new JobKey("DoFileOCR");
+    q.AddJob<DoFileOCR>(opts =>
+    opts.WithIdentity(jobKeyDoFileOCR));
+
+    q.AddTrigger(t => t.ForJob(jobKeyDoFileOCR)
+    .WithIdentity(jobKeyDoFileOCR + " trigger").WithSimpleSchedule(c=>c.WithIntervalInMinutes(5).RepeatForever())
     .StartAt(DateTimeOffset.Now.AddMinutes(1)));
 });
 

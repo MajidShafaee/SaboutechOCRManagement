@@ -42,12 +42,34 @@ namespace DAL.Services
 
         public async Task<IList<ProjectFile>> Get5FilesToOCR()
         {
-           return await _appDbContext.ProjectFiles.Include(c => c.FileOCR).Where(c => c.FileOCR == null).Take(5).ToListAsync();
+           return await _appDbContext.ProjectFiles.AsNoTracking().Include(c=>c.Project).Include(c => c.FileOCR).Where(c =>c.ProjectId!=1 && c.FileOCR == null).Take(5).ToListAsync();
         }
 
         public async Task SaveASync()
         {
             await _appDbContext.SaveChangesAsync();
+        }
+
+        public async Task AddFileOCR(int fileId, string ocrText)
+        {
+            Console.WriteLine($"Saving File:{fileId}");
+            try
+            {
+                using var appDbCntx = new AppDbContext();
+                appDbCntx.FileOCRs.Add(new FileOCR
+                {
+                    CreatedAt = DateTime.Now,
+                    OcrText = ocrText,
+                    ProjectFileId = fileId,
+
+                });
+               
+                await appDbCntx.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro Saving File:{fileId}, {ex.Message}");
+            }
         }
     }
 }
