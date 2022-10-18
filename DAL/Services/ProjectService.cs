@@ -42,7 +42,7 @@ namespace DAL.Services
 
         public async Task<IList<ProjectFile>> Get5FilesToOCR()
         {
-           return await _appDbContext.ProjectFiles.Include(c=>c.Project).Include(c => c.FileOCR).Where(c =>c.ProjectId!=1 && c.FileOCR == null).Take(5).ToListAsync();
+           return await _appDbContext.ProjectFiles.Include(c=>c.Project).Include(c => c.FileOCR).Where(c =>c.ProjectId!=1 && c.Status==0 && c.FileOCR == null).Take(5).ToListAsync();
         }
 
         public async Task SaveASync()
@@ -66,6 +66,21 @@ namespace DAL.Services
 
                 });
                
+                await appDbCntx.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro Saving File:{fileId}, {ex.Message}");
+            }
+        }
+
+        public async Task UpdateFileStatus(int fileId, int status)
+        {
+            try
+            {
+                using var appDbCntx = new AppDbContext();
+                var file = _appDbContext.ProjectFiles.Find(fileId);
+                file.Status = 1;
                 await appDbCntx.SaveChangesAsync();
             }
             catch (Exception ex)

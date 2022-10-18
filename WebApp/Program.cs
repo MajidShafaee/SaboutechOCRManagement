@@ -56,7 +56,7 @@ var app = builder.Build();
 
 using (var db = new AppDbContext())
 {
-    if (db.Database.GetPendingMigrations().Count() > 0)
+    
         db.Database.Migrate();
 }
 
@@ -80,6 +80,6 @@ app.Run();
 
 using (var db = new AppDbContext())
 {
-    if (db.Database.GetPendingMigrations().Count() > 0)
+   
         db.Database.Migrate();
 }

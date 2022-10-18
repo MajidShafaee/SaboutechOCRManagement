@@ -18,6 +18,8 @@ namespace DAL.Services
         
         public Task AddFileOCR(int fileId, string ocrText);
 
+        public Task UpdateFileStatus(int fileId, int status);
+
         public Task SaveASync();
     }
 }

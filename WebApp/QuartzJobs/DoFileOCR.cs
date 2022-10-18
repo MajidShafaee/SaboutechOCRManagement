@@ -18,8 +18,7 @@ public class DoFileOCR : IJob
         var filesToOCR=await _projectService.Get5FilesToOCR(); 
         foreach(var file in filesToOCR)
         {
-            file.Status = 1;
-            await _projectService.SaveASync();
+           await _projectService.UpdateFileStatus(file.Id, 1);
 
             TesseractPersianOCR ocr = new TesseractPersianOCR($"{file.Project.DirectoryPath}\\{file.PdfFilePath}",file.PdfFilePath,file.Id, new TesseractPersianOCR.LoggerCallback(LoggerCallback), new TesseractPersianOCR.DbCallback(DbCallback));
             Thread t1 = new Thread(new ThreadStart(ocr.DoOCR));
