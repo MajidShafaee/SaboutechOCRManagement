@@ -56,8 +56,9 @@ namespace DAL.Services
             try
             {
                 using var appDbCntx = new AppDbContext();
-                var file=_appDbContext.ProjectFiles.Find(fileId);
+                var file=await appDbCntx.ProjectFiles.FirstOrDefaultAsync(c => c.Id == fileId); 
                 file.Status = 2;
+                appDbCntx.Update(file);
                 appDbCntx.FileOCRs.Add(new FileOCR
                 {
                     CreatedAt = DateTime.Now,
@@ -79,8 +80,9 @@ namespace DAL.Services
             try
             {
                 using var appDbCntx = new AppDbContext();
-                var file = _appDbContext.ProjectFiles.Find(fileId);
+                var file =await _appDbContext.ProjectFiles.FirstOrDefaultAsync(c=>c.Id==fileId);
                 file.Status = status;
+                appDbCntx.Update(file);
                 await appDbCntx.SaveChangesAsync();
                 Console.WriteLine($"FileId: {fileId} Status Updated to {status}");
             }

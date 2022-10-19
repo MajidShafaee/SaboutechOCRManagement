@@ -95,6 +95,7 @@ namespace OCR
                         //image.Format = MagickFormat.Ptif;
                         //image.Write("Snakeware.Page" + page + ".tif");
                         page++;
+                        image.Dispose();
                     }
                     return images.Count;
                 }
