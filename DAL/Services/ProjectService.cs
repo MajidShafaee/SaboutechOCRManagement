@@ -65,7 +65,7 @@ namespace DAL.Services
                     ProjectFileId = fileId,
 
                 });
-               
+                Console.WriteLine($"FileId: {fileId} Status Updated to 2");
                 await appDbCntx.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -80,12 +80,13 @@ namespace DAL.Services
             {
                 using var appDbCntx = new AppDbContext();
                 var file = _appDbContext.ProjectFiles.Find(fileId);
-                file.Status = 1;
+                file.Status = status;
                 await appDbCntx.SaveChangesAsync();
+                Console.WriteLine($"FileId: {fileId} Status Updated to {status}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro Saving File:{fileId}, {ex.Message}");
+                Console.WriteLine($"Erro Updating File Status to {status}: fileId:{fileId}, {ex.Message}");
             }
         }
     }

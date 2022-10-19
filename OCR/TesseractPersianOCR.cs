@@ -37,20 +37,18 @@ namespace OCR
         {
             try
             {
-                Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}. starting fileId:{_fileId}---- Name:{_fileName}");
+                Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId}. Starting OCR fileId:{_fileId}");
                 var ocrText = string.Empty;                
-                var path = @$"{_filePath}";
-                Console.WriteLine($"Converting PdfToPng pdfPath:{path}");
+                var path = @$"{_filePath}";                
                 var imagesCount = ConvertPdfToPng(path, _fileName,_fileId);
                 Console.WriteLine($"Image Count:{imagesCount}");
                 for (int i = 1; i <= imagesCount; i++)
-                {
-                    Console.WriteLine($"Starting OCR :{Thread.CurrentThread.ManagedThreadId}_{_fileId}.Page{i}.png");
+                {                   
                     var (per, text) = TesseractOCR($"{Thread.CurrentThread.ManagedThreadId}_{_fileId}.Page{i}.png");
                     ocrText += text;
                     File.Delete($"{Thread.CurrentThread.ManagedThreadId}_{_fileId}.Page{i}.png");
                 }                
-                Console.WriteLine($"Success ocr. fileId:{_fileId}---- Name:{_fileName}");
+                Console.WriteLine($"Success ocr. fileId:{_fileId}");
                 
                _dbCallback(_fileId, ocrText);
 
@@ -90,8 +88,7 @@ namespace OCR
                     var page = 1;
 
                     foreach (var image in images)
-                    {
-                        if(image.Width>1080)
+                    {                        
                         // Write page to file that contains the page number
                         image.Write(Thread.CurrentThread.ManagedThreadId.ToString() + $"_{fileId}.Page" + page + ".png");
                         // Writing to a specific format works the same as for a single image
@@ -104,7 +101,7 @@ namespace OCR
             }
             catch (Exception ex)
             {
-                throw new Exception($"Exception on ConvertPdfToPng.__{fileId}__{ex.Message}");
+                throw new Exception($"Exception on ConvertPdfToPng __ {fileId} __ {ex.Message}");
             }
         }
        
@@ -130,7 +127,7 @@ namespace OCR
             }
             catch (Exception ex)
             {
-                throw new Exception($"Exception on OCR.\r\n{imagePath}.\r\n.{(ex.InnerException != null ? ex.InnerException.Message : string.Empty)}{ex.Message}\r\n{ex.StackTrace}\r\n{ex.Source}");
+                throw new Exception($"Exception on OCR:  {(ex.InnerException != null ? ex.InnerException.Message : string.Empty)}{ex.Message}\r\n{ex.StackTrace}\r\n{ex.Source}");
             }
         }
 

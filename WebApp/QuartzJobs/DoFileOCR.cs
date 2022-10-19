@@ -28,7 +28,7 @@ public class DoFileOCR : IJob
 
     public void LoggerCallback(string log)
     {
-        _logger.LogError("{@appName}. error in doing OCR.{@errorMessage}", "OCR", log);
+        _logger.LogError($"Error in doing OCR. {log}");
     }
 
     public void DbCallback(int fileId, string ocrText)
