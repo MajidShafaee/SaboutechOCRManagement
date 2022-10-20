@@ -15,7 +15,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
    
 });
 
-builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddTransient<IProjectService, ProjectService>();
 
 #region Quartz
 
@@ -44,7 +44,7 @@ builder.Services.AddQuartz(q =>
     opts.WithIdentity(jobKeyDoFileOCR));
 
     q.AddTrigger(t => t.ForJob(jobKeyDoFileOCR)
-    .WithIdentity(jobKeyDoFileOCR + " trigger").WithSimpleSchedule(c=>c.WithIntervalInMinutes(45).RepeatForever())
+    .WithIdentity(jobKeyDoFileOCR + " trigger")//.WithSimpleSchedule(c=>c.WithIntervalInMinutes(45).RepeatForever())
     .StartAt(DateTimeOffset.Now.AddMinutes(1)));
 });
 

@@ -8,8 +8,13 @@ namespace OCR
     {
         public delegate void LoggerCallback(string log, int fileId);
         private LoggerCallback _loggerCallback;
+
         public delegate void DbCallback(int fileId,string ocredText);
         private DbCallback _dbCallback;
+
+        public delegate void RunNewOCRCallback();
+        private RunNewOCRCallback _runNewOCRCallback;
+
         private string _filePath;
         private string _fileName= string.Empty;
         private int _fileId = 0;
@@ -21,13 +26,14 @@ namespace OCR
         //    MagickNET.Initialize();
         //}
 
-        public  TesseractPersianOCR(string filePath, string fileName, int fileId, LoggerCallback loggerCallback, DbCallback dbCallback)
+        public  TesseractPersianOCR(string filePath, string fileName, int fileId, LoggerCallback loggerCallback, DbCallback dbCallback, RunNewOCRCallback runNewOCRCallback)
         {
             MagickNET.SetTempDirectory(@"E:\imageMagicTempOCRManagement");
             MagickNET.SetGhostscriptDirectory(@"E:\gs");
             MagickNET.Initialize();
             _loggerCallback = loggerCallback;
             _dbCallback = dbCallback;
+            _runNewOCRCallback = runNewOCRCallback;
             _filePath = filePath;
             _fileName = fileName;
             _fileId = fileId;
@@ -49,9 +55,8 @@ namespace OCR
                     File.Delete($"{Thread.CurrentThread.ManagedThreadId}_{_fileId}.Page{i}.png");
                 }                
                 Console.WriteLine($"Success ocr. fileId:{_fileId}");
-                
-               _dbCallback(_fileId, ocrText);
-
+                _dbCallback(_fileId, ocrText);
+                _runNewOCRCallback();
             }
 
             catch (Exception ex)

@@ -15,12 +15,12 @@ public class DoFileOCR : IJob
     public async Task Execute(IJobExecutionContext context)
     {
         _logger.LogInformation("Starting ReadProjectExcleFile ");
-        var filesToOCR=await _projectService.Get5FilesToOCR(); 
+        var filesToOCR=await _projectService.GetFilesToOCR(5); 
         foreach(var file in filesToOCR)
         {
            await _projectService.UpdateFileStatus(file.Id, 1);
 
-            TesseractPersianOCR ocr = new TesseractPersianOCR($"{file.Project.DirectoryPath}\\{file.PdfFilePath}",file.PdfFilePath,file.Id, new TesseractPersianOCR.LoggerCallback(LoggerCallback), new TesseractPersianOCR.DbCallback(DbCallback));
+            TesseractPersianOCR ocr = new TesseractPersianOCR($"{file.Project.DirectoryPath}\\{file.PdfFilePath}",file.PdfFilePath,file.Id, new TesseractPersianOCR.LoggerCallback(LoggerCallback), new TesseractPersianOCR.DbCallback(DbCallback), new TesseractPersianOCR.RunNewOCRCallback(RunNewOCR));
             Thread t1 = new Thread(new ThreadStart(ocr.DoOCR));
             t1.Start();
         }
@@ -36,6 +36,20 @@ public class DoFileOCR : IJob
     {
         _logger.LogError($"DbCallback invoked for fileId;{fileId}");
         _projectService.AddFileOCR(fileId, ocrText);
+    }
+    public void RunNewOCR()
+    {
+        var fileToOCR = _projectService.GetFilesToOCR(1).Result;
+        if (fileToOCR.Count == 1)
+        {
+            var file = fileToOCR.First();
+            _projectService.UpdateFileStatus(file.Id, 1).Wait();
+            TesseractPersianOCR ocr = new TesseractPersianOCR($"{file.Project.DirectoryPath}\\{file.PdfFilePath}", file.PdfFilePath, file.Id, new TesseractPersianOCR.LoggerCallback(LoggerCallback), new TesseractPersianOCR.DbCallback(DbCallback), new TesseractPersianOCR.RunNewOCRCallback(RunNewOCR));
+            Thread t1 = new Thread(new ThreadStart(ocr.DoOCR));
+            t1.Start();
+
+        }
+
     }
 }
 

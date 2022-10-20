@@ -40,9 +40,10 @@ namespace DAL.Services
             return await _appDbContext.ProjectFiles.AnyAsync(c=>c.PdfFileUrl== pdfFileUrl);
         }
 
-        public async Task<IList<ProjectFile>> Get5FilesToOCR()
+        public async Task<IList<ProjectFile>> GetFilesToOCR(int count)
         {
-           return await _appDbContext.ProjectFiles.Include(c=>c.Project).Include(c => c.FileOCR).Where(c =>c.ProjectId!=1 && c.Status==0 && c.FileOCR == null).Take(5).ToListAsync();
+            using var appDbCntx = new AppDbContext();
+            return await appDbCntx.ProjectFiles.Include(c=>c.Project).Include(c => c.FileOCR).Where(c =>c.ProjectId!=1 && c.Status==0 && c.FileOCR == null).Take(count).ToListAsync();
         }
 
         public async Task SaveASync()
