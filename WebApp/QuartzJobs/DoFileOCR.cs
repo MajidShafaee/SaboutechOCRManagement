@@ -26,8 +26,9 @@ public class DoFileOCR : IJob
         }
     }
 
-    public void LoggerCallback(string log)
+    public void LoggerCallback(string log, int fileId)
     {
+        _projectService.UpdateFileStatus(fileId, 3);
         _logger.LogError($"Error in doing OCR. {log}");
     }
 

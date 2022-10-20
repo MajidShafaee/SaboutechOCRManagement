@@ -6,7 +6,7 @@ namespace OCR
 {
     public class TesseractPersianOCR
     {
-        public delegate void LoggerCallback(string log);
+        public delegate void LoggerCallback(string log, int fileId);
         private LoggerCallback _loggerCallback;
         public delegate void DbCallback(int fileId,string ocredText);
         private DbCallback _dbCallback;
@@ -57,7 +57,7 @@ namespace OCR
             catch (Exception ex)
             {
                 if (_loggerCallback != null)
-                    _loggerCallback($"{Thread.CurrentThread.ManagedThreadId},{ex.Message},{ex.InnerException?.Message}");
+                    _loggerCallback($"{Thread.CurrentThread.ManagedThreadId},{ex.Message},{ex.InnerException?.Message}", _fileId);
 
             }
             finally
@@ -96,12 +96,14 @@ namespace OCR
                         //image.Write("Snakeware.Page" + page + ".tif");
                         page++;
                         image.Dispose();
+                        
                     }
                     return images.Count;
                 }
             }
             catch (Exception ex)
             {
+                
                 throw new Exception($"Exception on ConvertPdfToPng __ {fileId} __ {ex.Message}");
             }
         }

@@ -80,7 +80,7 @@ namespace DAL.Services
             try
             {
                 using var appDbCntx = new AppDbContext();
-                var file =await _appDbContext.ProjectFiles.FirstOrDefaultAsync(c=>c.Id==fileId);
+                var file =await appDbCntx.ProjectFiles.FirstOrDefaultAsync(c=>c.Id==fileId);
                 file.Status = status;
                 appDbCntx.Update(file);
                 await appDbCntx.SaveChangesAsync();
