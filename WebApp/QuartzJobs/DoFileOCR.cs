@@ -30,6 +30,7 @@ public class DoFileOCR : IJob
     {
         _projectService.UpdateFileStatus(fileId, 3);
         _logger.LogError($"Error in doing OCR. {log}");
+        RunNewOCR();
     }
 
     public void DbCallback(int fileId, string ocrText)

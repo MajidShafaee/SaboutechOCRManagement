@@ -63,12 +63,14 @@ namespace OCR
             {
                 if (_loggerCallback != null)
                     _loggerCallback($"{Thread.CurrentThread.ManagedThreadId},{ex.Message},{ex.InnerException?.Message}", _fileId);
+                
 
             }
             finally
             {
                 if (Thread.CurrentThread.IsAlive)
                     Thread.CurrentThread.Interrupt();
+
             }
         }
 
