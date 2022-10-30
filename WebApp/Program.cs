@@ -2,6 +2,8 @@
 
 
 
+using WebApp.SignalRHubs;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -71,6 +73,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapHub<InfoHub>("/infoHub");
 
 app.MapControllerRoute(
     name: "default",

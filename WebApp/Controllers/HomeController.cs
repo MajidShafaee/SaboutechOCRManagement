@@ -7,16 +7,14 @@ namespace WebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IProjectService _projectService;
-        public HomeController(ILogger<HomeController> logger, IProjectService projectService)
+        
+        public HomeController(ILogger<HomeController> logger)
         {
-            _logger = logger;
-            _projectService = projectService;
+            _logger = logger;            
         }
 
         public async Task<IActionResult> Index()
-        {
-            var data=await _projectService.GetAll();
+        {            
             return View();
         }
 

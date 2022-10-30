@@ -92,5 +92,10 @@ namespace DAL.Services
                 Console.WriteLine($"Erro Updating File Status to {status}: fileId:{fileId}, {ex.Message}");
             }
         }
+
+        public async Task<int> GetProjectCount()
+        {
+            return await _appDbContext.Projects.Where(c => c.DirectoryPath != "legacy").CountAsync();
+        }
     }
 }
