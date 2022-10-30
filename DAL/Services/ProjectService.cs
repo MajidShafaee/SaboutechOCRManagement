@@ -97,5 +97,15 @@ namespace DAL.Services
         {
             return await _appDbContext.Projects.Where(c => c.DirectoryPath != "legacy").CountAsync();
         }
+
+        public async Task<int> GetFilesCount()
+        {
+            return await _appDbContext.ProjectFiles.Where(c => c.ProjectId!= 1).CountAsync();
+        }
+
+        public async Task<int> GetOcredCount()
+        {
+            return await _appDbContext.FileOCRs.CountAsync();
+        }
     }
 }

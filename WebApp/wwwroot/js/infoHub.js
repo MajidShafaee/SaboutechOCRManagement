@@ -34,10 +34,12 @@ var ocredCountEl = document.getElementById('ocredCount');
 var remainCountEl = document.getElementById('remainCount');
 
 
-function loadInfoCount(info) {
-    if (!info) return;
-
-    projectCountEl.innerHTML =info[0]    
+function loadInfoCount(projectCount, filesCount, ocredCount, remainCount) {    
+   
+    projectCountEl.innerHTML = projectCount
+    filesCountEl.innerHTML = filesCount
+    ocredCountEl.innerHTML = ocredCount
+    remainCountEl.innerHTML = remainCount
 }
 
 

@@ -11,8 +11,10 @@ namespace WebApp.SignalRHubs
         }
         public override async Task OnConnectedAsync()
         {
+            (int projectCount, int filesCount, int ocredCount, int remainCount) = await GetInfoCounts();
+            
             await Clients.Caller.SendAsync(
-                "GetInfoCount", await GetInfoCounts());
+                "GetInfoCount", projectCount,filesCount,ocredCount,remainCount);
             await base.OnConnectedAsync();
         }
         public async Task GetProjectCount()
@@ -20,11 +22,11 @@ namespace WebApp.SignalRHubs
             await Clients.Caller.SendAsync(
                 "GetInfoCount", await GetInfoCounts());
         }
-        async Task<(int,int,int,int)> GetInfoCounts()
+        public async Task<(int,int,int,int)> GetInfoCounts()
         {
             var projectCount = await _projectService.GetProjectCount();
-            var filesCount = await _projectService.GetProjectCount();
-            var ocredCount = await _projectService.GetProjectCount();
+            var filesCount = await _projectService.GetFilesCount();
+            var ocredCount = await _projectService.GetOcredCount();
             var remainCount = filesCount - ocredCount;
             return (projectCount, filesCount, ocredCount, remainCount);
         }

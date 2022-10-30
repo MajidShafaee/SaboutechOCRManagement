@@ -10,6 +10,8 @@ namespace DAL.Services
     {
         public Task<IList<Project>> GetAll();
         public Task<int> GetProjectCount();
+        public Task<int> GetFilesCount();
+        public Task<int> GetOcredCount();
         public Task<IList<Project>> GetAllWithoutLgacy();
         public Task<Project> GetLegacyProject();
         public Task AddProjectFile(ProjectFile file, Project project);

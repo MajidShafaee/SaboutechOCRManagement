@@ -54,6 +54,15 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(t => t.ForJob(jobKeyDoFileOCR)
     .WithIdentity(jobKeyDoFileOCR + " trigger")//.WithSimpleSchedule(c=>c.WithIntervalInMinutes(45).RepeatForever())
     .StartAt(DateTimeOffset.Now.AddMinutes(1)));
+
+
+    var jobKeyUpdateHomeInfo = new JobKey("UpdateHomeInfo");
+    q.AddJob<UpdateHomeInfo>(opts =>
+    opts.WithIdentity(jobKeyUpdateHomeInfo));
+
+    q.AddTrigger(t => t.ForJob(jobKeyUpdateHomeInfo)
+    .WithIdentity(jobKeyUpdateHomeInfo + " trigger").WithSimpleSchedule(c=>c.WithIntervalInMinutes(5).RepeatForever())
+    .StartAt(DateTimeOffset.Now.AddMinutes(1)));
 });
 
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
