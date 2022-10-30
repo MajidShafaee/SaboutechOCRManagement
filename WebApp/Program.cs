@@ -16,7 +16,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         assembly => assembly.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
    
 });
+builder.Services.AddSignalR(hubOptions =>
+{
+    hubOptions.EnableDetailedErrors = true;
+    //  hubOptions.KeepAliveInterval = TimeSpan.FromMinutes(1);
+    // hubOptions.ClientTimeoutInterval = TimeSpan.FromMinutes(1);
 
+});
 builder.Services.AddTransient<IProjectService, ProjectService>();
 
 #region Quartz
