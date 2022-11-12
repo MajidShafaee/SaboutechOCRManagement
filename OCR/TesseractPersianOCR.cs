@@ -56,15 +56,15 @@ namespace OCR
                 }                
                 Console.WriteLine($"Success ocr. fileId:{_fileId}");
                 _dbCallback(_fileId, ocrText);
-                _runNewOCRCallback();
+                //_runNewOCRCallback();
             }
 
             catch (Exception ex)
             {
                 if (_loggerCallback != null)
                     _loggerCallback($"{Thread.CurrentThread.ManagedThreadId},{ex.Message},{ex.InnerException?.Message}", _fileId);
-                
 
+                //_runNewOCRCallback();
             }
             finally
             {

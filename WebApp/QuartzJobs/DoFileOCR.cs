@@ -36,7 +36,8 @@ public class DoFileOCR : IJob
     public void DbCallback(int fileId, string ocrText)
     {
         _logger.LogError($"DbCallback invoked for fileId;{fileId}");
-        _projectService.AddFileOCR(fileId, ocrText);
+        _projectService.AddFileOCR(fileId, ocrText).Wait();
+        RunNewOCR();
     }
     public void RunNewOCR()
     {
