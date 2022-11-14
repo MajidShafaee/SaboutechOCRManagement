@@ -43,7 +43,7 @@ namespace DAL.Services
         public async Task<IList<ProjectFile>> GetFilesToOCR(int count)
         {
             using var appDbCntx = new AppDbContext();
-            return await appDbCntx.ProjectFiles.Include(c=>c.Project).Include(c => c.FileOCR).Where(c =>c.ProjectId!=1 && c.Status==0 && c.FileOCR == null).Take(count).ToListAsync();
+            return await appDbCntx.ProjectFiles.Include(c=>c.Project).Include(c => c.FileOCR).Where(c =>c.ProjectId!=1 && c.Status==0 && c.FileOCR == null && !c.PdfFileUrl.StartsWith("http://www.entizar.ir")).Take(count).ToListAsync();
         }
 
         public async Task SaveASync()
