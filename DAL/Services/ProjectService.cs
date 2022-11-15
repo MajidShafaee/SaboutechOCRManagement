@@ -107,5 +107,29 @@ namespace DAL.Services
         {
             return await _appDbContext.FileOCRs.CountAsync();
         }
+        public async Task<List<ExportProject>> GetReadyToExortProjects()
+        {
+            return await _appDbContext.ExportProjects.Where(c => c.UpdatedAt == null).ToListAsync();
+        }
+        public async Task<List<ProjectFile>> GetFilesToExport(int fromId, int toId)
+        {
+            return await _appDbContext.ProjectFiles.Where(c => c.Id >= fromId && c.Id <= toId).Include(c => c.FileOCR).ToListAsync();
+        }
+        public async Task<List<ProjectFile>> GetFilesToExport(bool includeExported=false)
+        {
+            var query = _appDbContext.ProjectFiles.Where(c=>c.ProjectId!=1);
+            if (!includeExported)
+                query = query.Where(c => c.Exported == false);
+            var data=await query.Include(c => c.FileOCR).ToListAsync();
+            return data;
+        }
+        public async Task UpdateFileExportStatus(bool exported, int fileId)
+        {
+            using var appDbCntx = new AppDbContext();
+            var file = await appDbCntx.ProjectFiles.FirstOrDefaultAsync(c => c.Id == fileId);
+            file.Exported = exported;
+            appDbCntx.Update(file);
+            await appDbCntx.SaveChangesAsync();
+        }
     }
 }

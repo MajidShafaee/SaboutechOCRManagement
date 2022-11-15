@@ -23,6 +23,10 @@ namespace DAL.Services
 
         public Task UpdateFileStatus(int fileId, int status);
 
+        public Task<List<ExportProject>>  GetReadyToExortProjects();
+        public Task<List<ProjectFile>> GetFilesToExport(int formId,int toId);
+        Task<List<ProjectFile>> GetFilesToExport(bool includeExported = false);
+        Task UpdateFileExportStatus(bool exported, int fileId);
         public Task SaveASync();
     }
 }

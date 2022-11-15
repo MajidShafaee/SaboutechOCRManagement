@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csproj", "{8A7B74D1-0D1E-409C-8FEA-5F92C94613ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OCR", "OCR\OCR.csproj", "{78C68CBF-9313-4913-8B36-AA874245A508}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OCR", "OCR\OCR.csproj", "{78C68CBF-9313-4913-8B36-AA874245A508}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataConvertor", "DataConvertor\DataConvertor.csproj", "{FC48A38F-5C65-4EBF-938F-0BB196BBFF5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{78C68CBF-9313-4913-8B36-AA874245A508}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78C68CBF-9313-4913-8B36-AA874245A508}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78C68CBF-9313-4913-8B36-AA874245A508}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC48A38F-5C65-4EBF-938F-0BB196BBFF5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC48A38F-5C65-4EBF-938F-0BB196BBFF5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC48A38F-5C65-4EBF-938F-0BB196BBFF5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC48A38F-5C65-4EBF-938F-0BB196BBFF5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
