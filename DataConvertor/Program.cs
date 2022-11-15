@@ -15,7 +15,7 @@ IHost host = Host.CreateDefaultBuilder(args)
                 assembly => assembly.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
 
         });
-        services.AddScoped<IProjectService, ProjectService>();
+        services.AddTransient<IProjectService, ProjectService>();
         #region Quartz
 
         services.AddQuartz(q =>

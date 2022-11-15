@@ -113,15 +113,22 @@ namespace DAL.Services
         }
         public async Task<List<ProjectFile>> GetFilesToExport(int fromId, int toId)
         {
-            return await _appDbContext.ProjectFiles.Where(c => c.Id >= fromId && c.Id <= toId).Include(c => c.FileOCR).ToListAsync();
+            return await _appDbContext.ProjectFiles.Include(c=>c.FileOCR).Where(c => c.ProjectId != 1 && c.Status==2).OrderBy(c=>c.Id).Take(toId-fromId).ToListAsync();
         }
+
         public async Task<List<ProjectFile>> GetFilesToExport(bool includeExported=false)
         {
-            var query = _appDbContext.ProjectFiles.Where(c=>c.ProjectId!=1);
+            var query = _appDbContext.ProjectFiles.Include(c => c.FileOCR).Where(c=>c.ProjectId!=1 && c.Status==2);
             if (!includeExported)
                 query = query.Where(c => c.Exported == false);
             var data=await query.Include(c => c.FileOCR).ToListAsync();
             return data;
+        }
+        public async Task<string> GetFileOcrText(int fileId)
+        {
+            using var appDbCntx = new AppDbContext();
+            var file = await appDbCntx.FileOCRs.FirstOrDefaultAsync(c => c.Id == fileId);
+            return file.OcrText;
         }
         public async Task UpdateFileExportStatus(bool exported, int fileId)
         {

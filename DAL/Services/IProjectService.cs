@@ -27,6 +27,7 @@ namespace DAL.Services
         public Task<List<ProjectFile>> GetFilesToExport(int formId,int toId);
         Task<List<ProjectFile>> GetFilesToExport(bool includeExported = false);
         Task UpdateFileExportStatus(bool exported, int fileId);
+        Task<string> GetFileOcrText(int fileId);
         public Task SaveASync();
     }
 }
