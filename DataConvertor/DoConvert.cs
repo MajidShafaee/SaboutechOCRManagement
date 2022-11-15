@@ -49,8 +49,8 @@ namespace DataConvertor
             foreach (var file in exportFiles)
             {
                 var filePath = @$"E:\ExportedFiles\ocr_management_export_{file.Id}.json";
-                if (!File.Exists(filePath))
-                    File.Create(filePath);
+                //if (!File.Exists(filePath))
+                //    File.Create(filePath);
                 using (var streamWriter = new StreamWriter(filePath))
                 using (var jsonWriter = new JsonTextWriter(streamWriter) { Formatting = Newtonsoft.Json.Formatting.Indented, Indentation = 2, IndentChar = ' ' })
                 {
